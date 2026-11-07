@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dolunaydan Alınmış Gözəllik</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body { 
+            background-color: #030509; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            perspective: 2000px; 
+            font-family: 'Lora', serif; 
+            overflow: hidden; 
+        }
+
+        .book-container { 
+            width: 340px; 
+            height: 530px; 
+            position: relative; 
+            transform-style: preserve-3d; 
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border-radius: 5px 15px 15px 5px;
+        }
+
+        .page { 
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            transform-origin: left center; 
+            transform-style: preserve-3d; 
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1); 
+            cursor: pointer;
+            backface-visibility: hidden;
+        }
+
+        /* Ön Qapaq (Atdığın dolunaya baxan qız şəkli) */
+        .cover-front { 
+            background-image: url('https://i.ibb.co/3W6Zp0P/Dolunaydan-Alinmis-Gozellik-Front.png'); 
+            background-size: cover; 
+            background-position: center; 
+            border-radius: 5px 15px 15px 5px; 
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 25px;
+        }
+
+        /* Arxa Qapaq (Yazısız dolunay mənzərəsi) */
+        .cover-back { 
+            background-image: url('https://i.ibb.co/6P0qX9K/Dolunaydan-Alinmis-Gozellik-Back.png'); 
+            background-size: cover; 
+            background-position: center; 
+            border-radius: 5px 15px 15px 5px; 
+            border: 1px solid rgba(255,255,255,0.15);
+            transform: rotateY(180deg);
+        }
+
+        .hint { 
+            font-size: 0.65rem; 
+            color: #fff; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            background: rgba(0,0,0,0.6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .back-page { 
+            background: #fcf8f2; 
+            transform: rotateY(180deg); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            border-right: 4px solid #e2d7c5; 
+            border-radius: 15px 5px 5px 15px;
+            padding: 20px;
+        }
+
+        .music-card {
+            width: 240px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid #e2d7c5;
+            text-align: center;
+        }
+
+        .album-art {
+            width: 170px;
+            height: 170px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-title { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.25rem; 
+            color: #2c221e; 
+            font-weight: 700; 
+            margin-bottom: 3px; 
+        }
+
+        .artist-name { 
+            font-size: 0.8rem; 
+            color: #7c4a27; 
+            letter-spacing: 1px; 
+            font-style: italic;
+        }
+
+        .inner-page { 
+            background: #fcf8f2; 
+            padding: 30px 22px; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: inset 10px 0 20px rgba(0,0,0,0.04); 
+            border-right: 4px solid #e2d7c5; 
+            border-radius: 5px 15px 15px 5px;
+        }
+
+        .inner-page h2 { 
+            font-family: 'Cormorant Garamond', serif; 
+            text-align: center; 
+            font-size: 1.5rem; 
+            color: #4a3525; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid #e8decb;
+            padding-bottom: 8px;
+        }
+
+        .message { 
+            font-size: 0.78rem; 
+            line-height: 1.65; 
+            font-style: italic; 
+            color: #2c221e; 
+            text-align: justify; 
+            overflow-y: auto; 
+            max-height: 400px; 
+            padding-right: 5px; 
+        }
+
+        .signature { 
+            margin-top: auto; 
+            text-align: right; 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            color: #7c4a27; 
+            padding-top: 10px; 
+        }
+
+        .flipped { transform: rotateY(-180deg); }
+        .move-right { transform: translateX(170px); }
+        .center-book { transform: translateX(0); }
+    </style>
+</head>
+<body>
+    <div class="book-container" id="container">
+        
+        <!-- SƏHİFƏ 1: Ön Qabıq -->
+        <div class="page" id="p1" style="z-index: 3;" onclick="nextStep()">
+            <div class="cover-front" style="width:100%; height:100%; position:absolute; top:0; left:0; backface-visibility:hidden;">
+                <div class="hint">Açmaq üçün toxun ✨</div>
+            </div>
+            <div class="back-page" style="width:100%; height:100%; position:absolute; top:0; left:0;">
+                <div class="music-card">
+                    <div class="album-art">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/2/25/Coldplay_Viva_la_Vida_or_Death_and_All_His_Friends.jpg" alt="Viva La Vida Albom">
+                    </div>
+                    <div class="song-title">Viva La Vida</div>
+                    <div class="artist-name">Coldplay</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SƏHİFƏ 2: Düşüncələr -->
+        <div class="page" id="p2" style="z-index: 2;" onclick="nextStep()">
+            <div class="inner-page" style="width:100%; height:100%; position:absolute; top:0; left:0; backface-visibility:hidden;">
+                <h2>Düşüncələr...</h2>
+                <div class="message">
+                    Yay ayları bir müddət Ay mənim pəncərəmdə görünürdü və həmin an düşünürdüm öz-özümə: heç Ay sadə olsaydı, sadə parlayan bir cisim kimi görünsəydi, bu qədər qəlbimizə toxunardımı? Cavab verim: yox. Onu bizə sevdirən, cazibədar göstərən onun, loru dildə desək, görünən ləkələridir.<br><br>
+                    Həmçinin bir gün bütün problemlərim üst-üstə gələn vaxt xanbağımdakı skamyamda oturmuşdum. Mahnının səsini artırdım, başımı qaldırdım göyə baxdım, quşları gördüm, gəlib o başımın üstündəki ağaca qondular; onlar uçdu, başqaları gəlib qondu, fərqli-fərqli quşlar, böcəklər. Düşündüyümdə isə ən gözəl ağaclar budaqları enişli-çıxışlı olanlar idi; qüsursuz, hər şeyi düz olan ağac mənə çəkici gəlmədi. Və bir şeyi fərq elədim, onu sənlə bölüşmək istəyirəm çox uzatmadan: budaqları enişli-çıxışlı, qüsurlu görünən ağaclar bizə uzaqdan çox çəkici və qüsurlu görünür, dərinliyinə gedəndə o özlüyündə qüsurludur — biz baxanda yox amma.
+                </div>
+            </div>
+        </div>
+
+        <!-- SƏHİFƏ 3: Davamı və Təbrik -->
+        <div class="page" id="p3" style="z-index: 1;" onclick="nextStep()">
+            <div class="inner-page" style="width:100%; height:100%; position:absolute; top:0; left:0; backface-visibility:hidden;">
+                <h2>Hər şeyə rəğmən...</h2>
+                <div class="message">
+                    Həmçinin illərlə üstünə qonan böcəklərə, üstündə yuva quzan quşlara, yuvasını dağıdıb gedən quşlara, gəlib anlıq keçən quşlara, böcəklərə aldırmadan böyüməyə və gözəl görünməyə davam edirlər. Ay-a gəldikdə isə, o, onun üçün qüsurlu olan ləkələr — elmdə buna "maria" deyirlər, amma bizə görünən ləkədir. Hər nəysə, əslində qüsurlu olduğunu düşünüb ona elə sevgiylə baxılmamalıdır, eləmi? Amma hər kəs aşiqdir Ay-ın o parlamasına, özü də dolunay dediyimiz o anda daha çox parlayıb gözümüzə sanki yeridir ki, o qüsurlarıyla necə də parlaqdır, necə də möhtəşəmdir.<br><br>
+                    Eynən sənin kimi, bu yaşına qədər enişli-çıxışlı olan budaqların; böyüməyə, gəlib-gedən quşlara, böcəklərə aldırış etmədən böyüsün. Sənin gecədən alınmış tếnin, saçların və o dolunay kimi parlaq gözlərin bütün ləkə kimi gördüyün hər şeyə rəğmən parlamağa davam etsin, hamının gözünə yerisin. Hər zaman gecən aydınlasın və sabahların xoş xəbərlə açısın. Hər kəsin gərgin olub, qaşlarını çatıb bir-birinin paxıllığını çəkdiyi üçün bir-birinə baxmamaq üçün başını yerdən qaldırmadığı bu dönəmdə, ruhunla gülümsəyib səmaya baxmağı unutma. Sənin qəlbinə, ruhuna hüzur, xoşbəxtlik arzulayıram. Ay-ı Günəş aydınlata bilər, amma sənin parlamaq üçün heç kimə və heç nəyə ehtiyacın yoxdur. Hər şeyə rəğmən səmaya baxıb gülümsə, hər zaman parlamağa davam et, unutma: səni qüsursuz edən qüsurlara, enişlərə və çıxışlara rəğmən parlamağındır.
+                </div>
+                <div class="signature">Sevgilərlə 🌹</div>
+            </div>
+        </div>
+
+        <!-- SƏHİFƏ 4: Arxa Qabıq (Yazısız Dolunay şəkli) -->
+        <div class="page" id="p4" style="z-index: 0;" onclick="nextStep()">
+            <div class="cover-back" style="width:100%; height:100%; position:absolute; top:0; left:0;"></div>
+        </div>
+
+    </div>
+
+    <script>
+        let state = 0;
+        function nextStep() {
+            const container = document.getElementById('container');
+            const p1 = document.getElementById('p1');
+            const p2 = document.getElementById('p2');
+            const p3 = document.getElementById('p3');
+            
+            if (state === 0) {
+                container.classList.add('move-right');
+                p1.classList.add('flipped');
+                state = 1;
+            } else if (state === 1) {
+                p2.classList.add('flipped');
+                state = 2;
+            } else if (state === 2) {
+                p3.classList.add('flipped');
+                container.classList.remove('move-right');
+                container.classList.add('center-book');
+                state = 3;
+            } else {
+                container.classList.remove('center-book');
+                p1.classList.remove('flipped');
+                p2.classList.remove('flipped');
+                p3.classList.remove('flipped');
+                state = 0;
+            }
+        }
+    </script>
+</body>
+</html>
